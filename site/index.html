@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FoamFit — 물티슈 없는 스마트 화장실</title>
+  <style>
+    :root {
+      --blue:    #1a6fc4;
+      --blue-dk: #0f4a8a;
+      --teal:    #00b4a6;
+      --bg:      #f7f9fc;
+      --white:   #ffffff;
+      --gray:    #6b7280;
+      --dark:    #111827;
+      --card-bg: #ffffff;
+      --border:  #e5e7eb;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--dark); line-height: 1.7; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo { font-size: 1.4rem; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; }
+    .logo span { color: var(--teal); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: var(--gray); font-size: 0.95rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--blue); }
+    .nav-cta {
+      background: var(--blue); color: #fff; border: none;
+      padding: .5rem 1.2rem; border-radius: 8px;
+      font-size: .9rem; font-weight: 600; cursor: pointer;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--blue-dk); }
+
+    /* HERO */
+    .hero {
+      min-height: 92vh;
+      background: linear-gradient(135deg, #0f4a8a 0%, #1a6fc4 50%, #00b4a6 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 4rem 5%;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-inner { position: relative; max-width: 780px; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; font-size: .85rem; font-weight: 600;
+      padding: .35rem 1rem; border-radius: 20px; margin-bottom: 1.5rem;
+      letter-spacing: .5px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 900; color: #fff;
+      line-height: 1.2; margin-bottom: 1.2rem;
+      letter-spacing: -1px;
+    }
+    .hero h1 em { color: #7ee8e0; font-style: normal; }
+    .hero p {
+      font-size: 1.15rem; color: rgba(255,255,255,0.85);
+      margin-bottom: 2.5rem; max-width: 560px; margin-left: auto; margin-right: auto;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: #fff; color: var(--blue);
+      padding: .85rem 2rem; border-radius: 10px;
+      font-size: 1rem; font-weight: 700; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,0.6); color: #fff;
+      padding: .85rem 2rem; border-radius: 10px;
+      font-size: 1rem; font-weight: 600; text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    /* STATS */
+    .stats {
+      background: var(--white);
+      padding: 3rem 5%;
+      display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2.4rem; font-weight: 900; color: var(--blue); }
+    .stat-label { font-size: .9rem; color: var(--gray); margin-top: .2rem; }
+
+    /* SECTION */
+    section { padding: 5rem 5%; }
+    .section-tag {
+      display: inline-block;
+      background: #e0edff; color: var(--blue);
+      font-size: .8rem; font-weight: 700; letter-spacing: .5px;
+      padding: .3rem .9rem; border-radius: 20px; margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900; letter-spacing: -0.5px; margin-bottom: 1rem; }
+    .sub { font-size: 1.05rem; color: var(--gray); max-width: 560px; }
+    .centered { text-align: center; }
+    .centered .sub { margin: 0 auto; }
+
+    /* PROBLEM */
+    .problem { background: #fff; }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .problem-card {
+      background: var(--bg); border-radius: 16px;
+      padding: 2rem; border: 1px solid var(--border);
+    }
+    .problem-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .problem-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: .5rem; }
+    .problem-card p { font-size: .95rem; color: var(--gray); }
+
+    /* HOW IT WORKS */
+    .how { background: var(--bg); }
+    .steps {
+      display: flex; gap: 0; margin-top: 3rem;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .step {
+      flex: 1; min-width: 180px; max-width: 220px;
+      text-align: center; position: relative; padding: 0 1rem;
+    }
+    .step:not(:last-child)::after {
+      content: '→';
+      position: absolute; right: -12px; top: 24px;
+      font-size: 1.4rem; color: var(--teal);
+    }
+    .step-circle {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff; font-size: 1.4rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 16px rgba(26,111,196,0.3);
+    }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
+    .step p { font-size: .88rem; color: var(--gray); }
+
+    /* FEATURES */
+    .features { background: #fff; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .feature-card {
+      background: var(--bg); border-radius: 16px;
+      padding: 2rem; border: 1px solid var(--border);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 1rem;
+    }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
+    .feature-card p { font-size: .9rem; color: var(--gray); }
+
+    /* B2B */
+    .b2b { background: var(--bg); }
+    .b2b-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; margin-top: 3rem; align-items: start;
+    }
+    @media (max-width: 768px) { .b2b-grid { grid-template-columns: 1fr; } }
+    .target-list { list-style: none; }
+    .target-list li {
+      display: flex; align-items: center; gap: .8rem;
+      padding: 1rem 1.2rem; margin-bottom: .8rem;
+      background: #fff; border-radius: 12px; border: 1px solid var(--border);
+      font-weight: 600;
+    }
+    .target-list li span.icon { font-size: 1.4rem; }
+    .objection-list { display: flex; flex-direction: column; gap: 1rem; }
+    .objection {
+      background: #fff; border-radius: 12px; padding: 1.2rem 1.5rem;
+      border-left: 4px solid var(--teal);
+    }
+    .objection .q { font-size: .9rem; color: var(--gray); margin-bottom: .4rem; }
+    .objection .q::before { content: 'Q  '; font-weight: 700; }
+    .objection .a { font-size: .95rem; font-weight: 600; color: var(--dark); }
+    .objection .a::before { content: 'A  '; color: var(--teal); font-weight: 800; }
+
+    /* ROADMAP */
+    .roadmap { background: #fff; }
+    .phases {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .phase {
+      border-radius: 16px; padding: 2rem;
+      border: 1px solid var(--border); position: relative; overflow: hidden;
+    }
+    .phase-1 { background: #eef4ff; border-color: #b3cef5; }
+    .phase-2 { background: #e6faf8; border-color: #80ddd6; }
+    .phase-3 { background: linear-gradient(135deg, #1a6fc4, #00b4a6); color: #fff; border: none; }
+    .phase-label {
+      font-size: .8rem; font-weight: 700; letter-spacing: .5px;
+      text-transform: uppercase; margin-bottom: .8rem; opacity: .7;
+    }
+    .phase h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: .8rem; }
+    .phase ul { list-style: none; }
+    .phase ul li { font-size: .9rem; margin-bottom: .4rem; opacity: .85; }
+    .phase ul li::before { content: '✓  '; font-weight: 700; }
+    .phase-3 .phase-label, .phase-3 h3, .phase-3 ul li { color: #fff; opacity: 1; }
+
+    /* SURVEY */
+    .survey { background: var(--bg); }
+    .survey-chart {
+      max-width: 560px; margin: 3rem auto 0;
+      background: #fff; border-radius: 20px; padding: 2.5rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+    .survey-chart h3 { font-size: 1rem; color: var(--gray); margin-bottom: 1.5rem; text-align: center; }
+    .bar-item { margin-bottom: 1.2rem; }
+    .bar-label { display: flex; justify-content: space-between; font-size: .9rem; margin-bottom: .4rem; }
+    .bar-label .pct { font-weight: 700; color: var(--blue); }
+    .bar-bg { background: var(--border); border-radius: 8px; height: 12px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 8px; }
+    .bar-fill.c1 { background: linear-gradient(90deg, var(--blue), var(--teal)); width: 50%; }
+    .bar-fill.c2 { background: #f0c040; width: 33.3%; }
+    .bar-fill.c3 { background: #9ca3af; width: 16.7%; }
+    .survey-note { text-align: center; font-size: .85rem; color: var(--gray); margin-top: 1.5rem; }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, #0f4a8a, #00b4a6);
+      padding: 5rem 5%; text-align: center;
+    }
+    .cta-section h2 { color: #fff; font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom: 1rem; }
+    .cta-section p { color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-bottom: 2.5rem; }
+    .cta-form {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      max-width: 520px; margin: 0 auto;
+    }
+    .cta-form input {
+      flex: 1; min-width: 200px;
+      padding: .85rem 1.2rem; border-radius: 10px;
+      border: none; font-size: 1rem; outline: none;
+    }
+    .cta-form button {
+      background: #fff; color: var(--blue);
+      padding: .85rem 1.8rem; border-radius: 10px;
+      border: none; font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: transform .2s;
+    }
+    .cta-form button:hover { transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark); color: rgba(255,255,255,0.5);
+      padding: 2rem 5%; text-align: center; font-size: .88rem;
+    }
+    footer strong { color: rgba(255,255,255,0.8); }
+
+    @media (max-width: 600px) {
+      .stats { gap: 2rem; }
+      .step:not(:last-child)::after { display: none; }
+      nav .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Foam<span>Fit</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">작동 원리</a></li>
+    <li><a href="#features">특징</a></li>
+    <li><a href="#b2b">B2B</a></li>
+    <li><a href="#roadmap">로드맵</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">도입 문의</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🚀 물티슈 없는 새로운 공중화장실 경험</div>
+    <h1>화장지를 뽑으면<br><em>폼이 분사됩니다</em></h1>
+    <p>배터리도, 전기공사도 필요 없습니다.<br>기존 디스펜서에 그냥 붙이면 됩니다.</p>
+    <div class="hero-btns">
+      <a href="#b2b" class="btn-primary">B2B 도입 알아보기</a>
+      <a href="#how" class="btn-outline">작동 방식 보기</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">50%</div>
+    <div class="stat-label">직장인 중 물티슈 대안 원함<br><small>(블라인드 설문 n=18)</small></div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">0W</div>
+    <div class="stat-label">소비 전력<br><small>(순수 기계식 구동)</small></div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">5분</div>
+    <div class="stat-label">설치 시간<br><small>(기존 디스펜서 탈착 없음)</small></div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">B2B</div>
+    <div class="stat-label">타겟 시장<br><small>(공공기관·휴게소·오피스)</small></div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="section-tag">문제</div>
+  <h2>공중화장실의 불편한 진실</h2>
+  <p class="sub">물티슈를 쓰고 싶지만, 그럴 수 없는 이유가 있습니다.</p>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="problem-icon">🚽</div>
+      <h3>변기 막힘 유발</h3>
+      <p>물티슈는 물에 녹지 않아 배관을 막습니다. 처리 비용이 수십만 원에 달하기도 합니다.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🗑️</div>
+      <h3>쓰레기통 넘침</h3>
+      <p>물티슈 쓰레기가 화장실 쓰레기통을 가득 채워 관리 부담이 커집니다.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">💸</div>
+      <h3>비데 설치 불가</h3>
+      <p>비데는 공간·비용·배관 문제로 공중화장실에 보급하기 어렵습니다.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">😣</div>
+      <h3>마찰(Friction) 지점</h3>
+      <p>"깨끗하게 닦고 싶지만 물티슈는 쓰기 꺼려진다" — 직장인 50%가 공감하는 불편함입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="centered">
+    <div class="section-tag">작동 원리</div>
+    <h2>전기 없이 작동합니다</h2>
+    <p class="sub">화장지를 뽑는 힘만으로 폼이 분사됩니다. 배터리도, 전선도 필요 없습니다.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-circle">🤚</div>
+      <h3>손을 뻗는다</h3>
+      <p>디스펜서 레버에 손을 가져댑니다</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">📜</div>
+      <h3>화장지를 당긴다</h3>
+      <p>레버를 당기면 기계식 펌프가 압축됩니다</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">💨</div>
+      <h3>폼이 분사된다</h3>
+      <p>노즐에서 적정량의 폼 세정제가 분사됩니다</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">✨</div>
+      <h3>물티슈처럼 닦는다</h3>
+      <p>거품이 묻은 화장지로 쾌적하게 닦습니다</p>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:2.5rem; padding: 1.2rem 2rem; background:#fff; border-radius:12px; display:inline-block; border:1px solid var(--border); margin-left:auto; margin-right:auto; display:flex; justify-content:center;">
+    <p style="color:var(--gray); font-size:.95rem;">🔒 &nbsp;<strong>Lock 스위치</strong> 내장 — 원하지 않으면 사용자가 직접 끌 수 있습니다</p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="centered">
+    <div class="section-tag">특징</div>
+    <h2>왜 FoamFit인가</h2>
+    <p class="sub">기존 제품과 다른 4가지 핵심 차별점입니다.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">⚙️</div>
+      <h3>완전 기계식 — 무전원</h3>
+      <p>배터리 교체도, 전기 공사도 없습니다. 화장지를 뽑는 힘만으로 작동하는 순수 기계식 구조입니다.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔧</div>
+      <h3>모듈형 — 5분 설치</h3>
+      <p>기존 점보롤 디스펜서를 교체할 필요 없습니다. 옆에 붙이면 끝. PoC 도입 장벽이 거의 없습니다.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧴</div>
+      <h3>폼 세정제 — 찢어지지 않음</h3>
+      <p>물(미스트)과 달리 거품은 화장지에 덜 스며들어 찢어지지 않습니다. 세정력도 더 뛰어납니다.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📦</div>
+      <h3>카트리지 구독 — 관리 최소화</h3>
+      <p>정기 배송 카트리지 하나로 폼 보충이 끝납니다. 복잡한 유지보수가 없습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SURVEY -->
+<section class="survey" id="survey">
+  <div class="centered">
+    <div class="section-tag">시장 검증</div>
+    <h2>직장인들은 이미 원하고 있습니다</h2>
+    <p class="sub">블라인드 앱 설문에서 확인한 실제 수요입니다.</p>
+  </div>
+  <div class="survey-chart">
+    <h3>💬 "대변 후 휴지 사용 경험" 설문 결과</h3>
+    <div class="bar-item">
+      <div class="bar-label">
+        <span>물티슈가 있다면 쓴다 (잠재 고객)</span>
+        <span class="pct">50%</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill c1"></div></div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label">
+        <span>마른 휴지로 충분하다</span>
+        <span class="pct">33%</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill c2"></div></div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label">
+        <span>물티슈도 귀찮다</span>
+        <span class="pct">17%</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill c3"></div></div>
+    </div>
+    <p class="survey-note">n=18 | 블라인드 앱 직장인 설문 | 2026</p>
+  </div>
+</section>
+
+<!-- B2B -->
+<section class="b2b" id="b2b">
+  <div class="section-tag">B2B</div>
+  <h2>어디에 도입할 수 있나요</h2>
+  <p class="sub">점보롤 디스펜서가 있는 곳이라면 어디든 가능합니다.</p>
+  <div class="b2b-grid">
+    <div>
+      <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--gray);">주요 도입 대상</h3>
+      <ul class="target-list">
+        <li><span class="icon">🛣️</span> 고속도로 휴게소</li>
+        <li><span class="icon">🏛️</span> 공공기관 (정부·지자체 청사)</li>
+        <li><span class="icon">🏬</span> 대형 쇼핑몰·복합시설</li>
+        <li><span class="icon">🏢</span> 기업 오피스 빌딩</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--gray);">자주 받는 질문</h3>
+      <div class="objection-list">
+        <div class="objection">
+          <p class="q">휴지 사용량이 늘면 비용이 올라가지 않나요?</p>
+          <p class="a">물티슈 변기 막힘 해결 비용이 훨씬 더 큽니다.</p>
+        </div>
+        <div class="objection">
+          <p class="q">전기 공사가 필요한가요?</p>
+          <p class="a">완전 기계식입니다. 전기 공사 불필요합니다.</p>
+        </div>
+        <div class="objection">
+          <p class="q">기존 디스펜서를 교체해야 하나요?</p>
+          <p class="a">아닙니다. 기존 디스펜서 옆에 부착만 하면 됩니다.</p>
+        </div>
+        <div class="objection">
+          <p class="q">관리가 복잡하지 않나요?</p>
+          <p class="a">카트리지 정기 구독으로 교체 하나로 끝납니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section class="roadmap" id="roadmap">
+  <div class="centered">
+    <div class="section-tag">로드맵</div>
+    <h2>단계별 성장 전략</h2>
+    <p class="sub">디스펜서 파트너십으로 시작해 자체 브랜드로 확장합니다.</p>
+  </div>
+  <div class="phases">
+    <div class="phase phase-1">
+      <div class="phase-label">Phase 1 · 0~12개월</div>
+      <h3>파트너십 공동개발</h3>
+      <ul>
+        <li>디스펜서 제조사 파트너십</li>
+        <li>OEM 폼 세정제 공급 계약</li>
+        <li>PoC 시범 설치 (휴게소 등)</li>
+        <li>기계식 펌프 프로토타입</li>
+      </ul>
+    </div>
+    <div class="phase phase-2">
+      <div class="phase-label">Phase 2 · 12~24개월</div>
+      <h3>카트리지 구독 정착</h3>
+      <ul>
+        <li>B2B 정기 구독 런칭</li>
+        <li>사용량 데이터 수집·분석</li>
+        <li>교체 주기 최적화</li>
+        <li>고객사 레퍼런스 확보</li>
+      </ul>
+    </div>
+    <div class="phase phase-3">
+      <div class="phase-label">Phase 3 · 24개월+</div>
+      <h3>자체 브랜드 확장</h3>
+      <ul>
+        <li>자체 폼 포뮬러 개발</li>
+        <li>특허 출원</li>
+        <li>FoamFit 독립 브랜드 론칭</li>
+        <li>직접 B2B 영업 확장</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2>도입을 검토하고 계신가요?</h2>
+  <p>파트너십·시범 설치·구독 문의를 남겨주세요.<br>담당자가 직접 연락드리겠습니다.</p>
+  <div class="cta-form">
+    <input type="email" placeholder="이메일 주소를 입력해주세요" />
+    <button onclick="alert('문의가 접수되었습니다. 곧 연락드리겠습니다!')">문의하기</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>FoamFit</strong> &nbsp;|&nbsp; 물티슈 없는 스마트 화장실 솔루션 &nbsp;|&nbsp; © 2026</p>
+  <p style="margin-top:.5rem; font-size:.8rem;">MVP 기획 단계 · Mock 사이트</p>
+</footer>
+
+</body>
+</html>
