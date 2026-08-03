@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FoamFit — Pitch Deck 2026</title>
+<style>
+:root {
+  --bg:       #0B1929;
+  --surface:  #0F2035;
+  --surface2: #162A40;
+  --accent:   #00C9B1;
+  --accent-d: rgba(0,201,177,.12);
+  --text:     #EDF2F7;
+  --muted:    #7A9AB5;
+  --border:   #1E3A52;
+  --ghost:    rgba(255,255,255,.028);
+  --neg:      #E05A5A;
+}
+@media (prefers-color-scheme: light) { :root {
+  --bg: #F0F5FA; --surface: #fff; --surface2: #E0EAF4;
+  --accent: #007A6B; --accent-d: rgba(0,122,107,.1);
+  --text: #0B1929; --muted: #5B7A96; --border: #C5D5E4;
+  --ghost: rgba(0,0,0,.04); --neg: #C0392B;
+}}
+:root[data-theme="light"] {
+  --bg: #F0F5FA; --surface: #fff; --surface2: #E0EAF4;
+  --accent: #007A6B; --accent-d: rgba(0,122,107,.1);
+  --text: #0B1929; --muted: #5B7A96; --border: #C5D5E4;
+  --ghost: rgba(0,0,0,.04); --neg: #C0392B;
+}
+:root[data-theme="dark"] {
+  --bg: #0B1929; --surface: #0F2035; --surface2: #162A40;
+  --accent: #00C9B1; --accent-d: rgba(0,201,177,.12);
+  --text: #EDF2F7; --muted: #7A9AB5; --border: #1E3A52;
+  --ghost: rgba(255,255,255,.028); --neg: #E05A5A;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:'Apple SD Gothic Neo','Noto Sans KR','Pretendard',system-ui,sans-serif}
+
+/* ── SLIDE SYSTEM ── */
+.deck{position:relative;width:100vw;height:100vh}
+.slide{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  padding:4vh 6vw 5vh;background:var(--bg);
+  opacity:0;pointer-events:none;overflow:hidden;
+  transition:opacity .45s ease,transform .45s ease;
+  transform:translateY(18px);
+}
+.slide.active{opacity:1;pointer-events:auto;transform:translateY(0)}
+.slide.exit{opacity:0;transform:translateY(-18px)}
+
+/* Ghost number */
+.gn{
+  position:absolute;right:-.05em;bottom:-.15em;
+  font-size:38vw;font-weight:900;line-height:1;
+  color:var(--ghost);pointer-events:none;user-select:none;
+  letter-spacing:-.04em;font-variant-numeric:tabular-nums;
+}
+
+/* ── HEADER ── */
+.sl-head{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:3.5vh;position:relative;z-index:2;
+}
+.logo{font-size:1rem;font-weight:800;letter-spacing:-.02em;color:var(--text)}
+.logo b{color:var(--accent)}
+.counter{font-size:.7rem;font-weight:600;letter-spacing:.12em;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* ── BODY ── */
+.sl-body{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;z-index:2}
+
+.cat{display:inline-block;font-size:.65rem;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent);margin-bottom:1.2vh}
+
+h2.title{
+  font-size:clamp(2rem,5vw,4.6rem);font-weight:800;line-height:1.08;
+  letter-spacing:-.03em;text-wrap:balance;margin-bottom:1.8vh;
+}
+h2.title em{font-style:normal;color:var(--accent)}
+
+.rule{width:40px;height:2px;background:var(--accent);margin:2vh 0}
+
+p.lead{font-size:clamp(.88rem,1.3vw,1.05rem);color:var(--muted);line-height:1.75;max-width:58ch}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.5vw}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);padding:2.2vh 1.8vw}
+.card-lbl{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.6vh}
+.card-val{font-size:clamp(1.3rem,2.2vw,2rem);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.card-val.ac{color:var(--accent)}
+.card-sub{font-size:.78rem;color:var(--muted);margin-top:.4vh;line-height:1.5}
+
+/* ── PROBLEM LIST ── */
+.prob-list{margin-top:1.5vh}
+.prob-item{display:flex;gap:2vw;padding:1.8vh 0;border-bottom:1px solid var(--border)}
+.prob-item:first-child{border-top:1px solid var(--border)}
+.prob-idx{font-size:.65rem;font-weight:700;letter-spacing:.1em;color:var(--accent);min-width:2rem;padding-top:.25rem}
+.prob-h{font-size:clamp(.9rem,1.2vw,1.05rem);font-weight:700;margin-bottom:.3vh}
+.prob-p{font-size:.82rem;color:var(--muted);line-height:1.6}
+
+/* ── STEPS ── */
+.steps{display:flex;margin-top:2.5vh}
+.step{flex:1;padding:2.5vh 1.8vw;background:var(--surface);border:1px solid var(--border);border-right:none}
+.step:last-child{border-right:1px solid var(--border)}
+.step-n{font-size:.62rem;font-weight:700;letter-spacing:.14em;color:var(--accent);margin-bottom:1vh}
+.step-h{font-size:clamp(.88rem,1.1vw,1rem);font-weight:700;margin-bottom:.5vh}
+.step-p{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+/* ── WHY NOW ── */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4vw;margin-top:2vh}
+.why-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:2.2vh 1.8vw}
+.why-fig{font-size:clamp(1.6rem,2.8vw,2.6rem);font-weight:900;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;margin-bottom:.6vh}
+.why-h{font-size:clamp(.88rem,1.1vw,1rem);font-weight:700;margin-bottom:.4vh}
+.why-p{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+/* ── MARKET ── */
+.mkt-rows{margin-top:2vh}
+.mkt-row{margin-bottom:2.8vh}
+.mkt-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.8vh}
+.mkt-name{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mkt-val{font-size:clamp(1rem,1.8vw,1.5rem);font-weight:800;font-variant-numeric:tabular-nums}
+.mkt-bar-bg{height:6px;background:var(--surface2)}
+.mkt-bar{height:100%;background:var(--accent);transition:width .9s ease}
+.mkt-note{font-size:.72rem;color:var(--muted);margin-top:.5vh}
+.mkt-labels{display:flex;gap:3vw;margin-top:3vh;flex-wrap:wrap}
+.mkt-lbl-item .l{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mkt-lbl-item .v{font-size:clamp(1.1rem,2vw,1.8rem);font-weight:900;color:var(--text);font-variant-numeric:tabular-nums}
+.mkt-lbl-item .d{font-size:.72rem;color:var(--muted)}
+
+/* ── COMPETITION ── */
+.comp-wrap{overflow-x:auto;margin-top:2vh}
+table.comp{width:100%;border-collapse:collapse;font-size:clamp(.72rem,1vw,.88rem)}
+table.comp th{padding:1.2vh 1.2vw;font-size:.65rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);text-align:center}
+table.comp th:first-child{text-align:left}
+table.comp th.us{color:var(--accent);border-bottom:2px solid var(--accent)}
+table.comp td{padding:1.4vh 1.2vw;text-align:center;border-bottom:1px solid var(--border);color:var(--muted);font-size:.82rem}
+table.comp td:first-child{text-align:left;font-weight:600;color:var(--text)}
+table.comp td.us{color:var(--text)}
+.ck{color:var(--accent);font-weight:800}
+.cx{color:var(--neg);font-weight:700}
+.cm{color:var(--muted)}
+
+/* ── BIZ MODEL ── */
+.biz-wrap{display:grid;grid-template-columns:1fr 1px 1fr;gap:3.5vw;margin-top:2vh;align-items:start}
+.biz-sep{background:var(--border);align-self:stretch}
+.biz-lbl{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5vh}
+.biz-price{font-size:clamp(2rem,4vw,3.6rem);font-weight:900;letter-spacing:-.03em;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.biz-unit{font-size:.8rem;color:var(--muted);margin:.6vh 0 1.8vh}
+.biz-list{list-style:none;display:flex;flex-direction:column;gap:.8vh}
+.biz-list li{font-size:.83rem;color:var(--muted);padding-left:1rem;position:relative;line-height:1.5}
+.biz-list li::before{content:'—';position:absolute;left:0;color:var(--accent)}
+.biz-tag{display:inline-block;background:var(--accent-d);border:1px solid var(--accent);
+  color:var(--accent);font-size:.62rem;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:.2rem .6rem;margin-bottom:1vh}
+
+/* ── TEAM ── */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;margin-top:2vh}
+.team-card{background:var(--surface);border:1px solid var(--border);padding:2.4vh 1.8vw}
+.team-init{width:48px;height:48px;background:var(--accent-d);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:.95rem;font-weight:800;color:var(--accent);margin-bottom:1.5vh}
+.team-name{font-size:clamp(.9rem,1.2vw,1.05rem);font-weight:700;margin-bottom:.2vh}
+.team-role{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.9vh}
+.team-bio{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+/* ── FINANCIALS ── */
+.fin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2vw;margin-top:2.5vh}
+.fin-col{background:var(--surface);border:1px solid var(--border);padding:2.5vh 1.8vw;position:relative;overflow:hidden}
+.fin-col.highlight{border-color:var(--accent)}
+.fin-col.highlight::before{content:'3년 목표';position:absolute;top:0;right:0;
+  background:var(--accent);color:#fff;font-size:.6rem;font-weight:700;
+  letter-spacing:.1em;padding:.3rem .7rem}
+.fin-year{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1vh}
+.fin-rev{font-size:clamp(1.4rem,2.5vw,2.2rem);font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-bottom:.3vh}
+.fin-sub{font-size:.75rem;color:var(--muted);margin-bottom:2vh;line-height:1.5}
+.fin-row{display:flex;justify-content:space-between;align-items:center;
+  padding:.7vh 0;border-top:1px solid var(--border);font-size:.78rem}
+.fin-row-l{color:var(--muted)}
+.fin-row-r{font-weight:700;font-variant-numeric:tabular-nums}
+.fin-row-r.ac{color:var(--accent)}
+
+/* ── COVER EXTRAS ── */
+.cover-meta{display:flex;gap:3vw;flex-wrap:wrap;margin-top:4vh}
+.cm-item .cm-l{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cm-item .cm-v{font-size:clamp(.95rem,1.5vw,1.2rem);font-weight:800;margin-top:.2vh}
+
+/* ── NAV ── */
+.nav-dots{position:fixed;right:2vw;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:.7rem;z-index:100}
+.dot{width:5px;height:5px;background:var(--border);border-radius:50%;cursor:pointer;
+  transition:background .25s,transform .25s}
+.dot.active{background:var(--accent);transform:scale(1.5)}
+
+.nav-arr{position:fixed;bottom:3vh;right:4vw;display:flex;gap:.7rem;z-index:100}
+.nbtn{width:38px;height:38px;background:var(--surface);border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;font-size:1rem;display:flex;align-items:center;
+  justify-content:center;transition:background .2s,color .2s,border-color .2s}
+.nbtn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+.theme-btn{position:fixed;top:2.5vh;right:5vw;width:34px;height:34px;
+  background:var(--surface);border:1px solid var(--border);color:var(--muted);
+  cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;z-index:200}
+
+@media(max-width:768px){
+  .g2,.g3,.g4{grid-template-columns:1fr 1fr}
+  .team-grid{grid-template-columns:1fr 1fr}
+  .biz-wrap{grid-template-columns:1fr;}.biz-sep{display:none}
+  .fin-grid{grid-template-columns:1fr}
+  .steps{flex-direction:column}
+  .step{border-right:1px solid var(--border);border-bottom:none}
+  .step:last-child{border-bottom:1px solid var(--border)}
+  .gn{font-size:60vw}
+}
+@media(prefers-reduced-motion:reduce){.slide,.nbtn{transition:none}}
+</style>
+</head>
+<body>
+
+<button class="theme-btn" id="themeBtn" title="테마 전환">◐</button>
+
+<div class="deck" id="deck">
+
+<!-- ── 01 COMPANY PURPOSE ── -->
+<section class="slide active" data-i="0">
+  <div class="gn">01</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">01 — 10</div>
+  </div>
+  <div class="sl-body" style="justify-content:center">
+    <div class="cat">Company Purpose</div>
+    <h2 class="title">공용화장실 위생의<br><em>새로운 기준</em></h2>
+    <div class="rule"></div>
+    <p class="lead">FoamFit은 프리미엄 공용화장실에 독립형 폼 세정제 디스펜서를 공급하는 B2B 위생 솔루션입니다.<br>버튼 하나로 누구나 물티슈 수준의 위생 경험을 누릴 수 있습니다.</p>
+    <div class="cover-meta">
+      <div class="cm-item"><div class="cm-l">비즈니스 모델</div><div class="cm-v">HW 판매 + 구독</div></div>
+      <div class="cm-item"><div class="cm-l">진입 시장</div><div class="cm-v">한국 B2B</div></div>
+      <div class="cm-item"><div class="cm-l">현재 단계</div><div class="cm-v">MVP 기획</div></div>
+      <div class="cm-item"><div class="cm-l">TAM</div><div class="cm-v">₩1,800억</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 02 PROBLEM ── -->
+<section class="slide" data-i="1">
+  <div class="gn">02</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">02 — 10</div>
+  </div>
+  <div class="sl-body" style="justify-content:flex-start;padding-top:1vh">
+    <div class="cat">Problem</div>
+    <h2 class="title" style="font-size:clamp(1.8rem,4vw,3.6rem)">아직 해결되지 않은<br>공용화장실의 문제</h2>
+    <div class="prob-list">
+      <div class="prob-item">
+        <div class="prob-idx">01</div>
+        <div>
+          <div class="prob-h">물티슈 → 변기 막힘 & 환경 오염</div>
+          <div class="prob-p">물티슈는 물에 녹지 않아 배관을 막고 수십만 원의 처리 비용을 유발합니다. 플라스틱 성분으로 환경 부담도 큽니다.</div>
+        </div>
+      </div>
+      <div class="prob-item">
+        <div class="prob-idx">02</div>
+        <div>
+          <div class="prob-h">비데 보급 한계</div>
+          <div class="prob-p">비데는 설치 비용, 배관 공사, 위생 관리 문제로 공용화장실 전 칸에 보급하기 사실상 불가능합니다.</div>
+        </div>
+      </div>
+      <div class="prob-item">
+        <div class="prob-idx">03</div>
+        <div>
+          <div class="prob-h">프리미엄 시설의 브랜드 이미지 저하</div>
+          <div class="prob-p">공항·호텔·백화점도 화장실 위생 불만은 해결하지 못하고 있습니다. 리뷰에 반복 등장하는 공통 불만입니다.</div>
+        </div>
+      </div>
+      <div class="prob-item">
+        <div class="prob-idx">04</div>
+        <div>
+          <div class="prob-h">실질적인 위생 대안이 없다</div>
+          <div class="prob-p">블라인드 설문 결과, 직장인 50%가 더 쾌적한 대안이 있다면 쓰겠다고 답했습니다. 수요는 있지만 공급이 없습니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 03 SOLUTION ── -->
+<section class="slide" data-i="2">
+  <div class="gn">03</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">03 — 10</div>
+  </div>
+  <div class="sl-body">
+    <div class="cat">Solution</div>
+    <h2 class="title">독립형 폼 디스펜서<br><em>3단계로 끝납니다</em></h2>
+    <div class="rule"></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">STEP 01</div>
+        <div class="step-h">버튼을 누른다</div>
+        <div class="step-p">화장실 칸 벽면의 FoamFit 디스펜서 버튼을 한 번 누릅니다. 별도 교육 불필요.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">STEP 02</div>
+        <div class="step-h">폼이 나온다</div>
+        <div class="step-p">적정량의 폼 세정제가 즉시 분사됩니다. 화장지에 스며들지 않는 거품 타입.</div>
+      </div>
+      <div class="step">
+        <div class="step-n">STEP 03</div>
+        <div class="step-h">휴지로 닦는다</div>
+        <div class="step-p">폼이 묻은 일반 화장지로 물티슈처럼 쾌적하게 닦습니다. 변기에 그냥 버려도 됩니다.</div>
+      </div>
+    </div>
+    <div class="g3" style="margin-top:2.5vh">
+      <div class="card">
+        <div class="card-lbl">설치 방식</div>
+        <div class="card-val" style="font-size:clamp(1rem,1.5vw,1.3rem)">벽면 독립 설치</div>
+        <div class="card-sub">기존 설비 교체 불필요</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">리필 방식</div>
+        <div class="card-val" style="font-size:clamp(1rem,1.5vw,1.3rem)">카트리지 구독</div>
+        <div class="card-sub">월 정기 배송 자동 교체</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">전원</div>
+        <div class="card-val" style="font-size:clamp(1rem,1.5vw,1.3rem)">건전지 / USB-C</div>
+        <div class="card-sub">전기 공사 불필요</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 04 WHY NOW ── -->
+<section class="slide" data-i="3">
+  <div class="gn">04</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">04 — 10</div>
+  </div>
+  <div class="sl-body">
+    <div class="cat">Why Now?</div>
+    <h2 class="title">지금이 적기인<br><em>4가지 이유</em></h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-fig">+73%</div>
+        <div class="why-h">포스트 코로나 위생 인식 급변</div>
+        <div class="why-p">코로나 이후 공중위생에 대한 소비자 민감도가 크게 높아졌습니다. 시설 위생이 방문 결정에 직접 영향을 줍니다.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-fig">₩1,800억</div>
+        <div class="why-h">B2B 위생 구독 시장 급성장</div>
+        <div class="why-p">공용공간 위생 서비스의 B2B 구독 모델이 빠르게 확산되고 있습니다. 의사결정자의 수용성이 높아졌습니다.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-fig">50%</div>
+        <div class="why-h">검증된 잠재 수요</div>
+        <div class="why-p">블라인드 설문(n=18)에서 직장인 절반이 대안이 있다면 쓰겠다고 답했습니다. 경쟁 제품이 없는 블루오션입니다.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-fig">0개</div>
+        <div class="why-h">직접 경쟁자 부재</div>
+        <div class="why-p">공용화장실 칸 내부에 설치하는 독립형 폼 디스펜서 전용 B2B 제품은 국내에 아직 존재하지 않습니다.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 05 MARKET SIZE ── -->
+<section class="slide" data-i="4">
+  <div class="gn">05</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">05 — 10</div>
+  </div>
+  <div class="sl-body">
+    <div class="cat">Market Size</div>
+    <h2 class="title">한국 B2B<br>공용화장실 위생 시장</h2>
+    <div class="rule"></div>
+    <div class="mkt-rows">
+      <div class="mkt-row">
+        <div class="mkt-meta">
+          <div>
+            <div class="mkt-name">TAM — 전체 가용 시장</div>
+            <div class="mkt-note">전국 공용화장실 500,000대 × ₩360K/년</div>
+          </div>
+          <div class="mkt-val">₩1,800억</div>
+        </div>
+        <div class="mkt-bar-bg"><div class="mkt-bar" style="width:100%"></div></div>
+      </div>
+      <div class="mkt-row">
+        <div class="mkt-meta">
+          <div>
+            <div class="mkt-name">SAM — 도달 가능 시장</div>
+            <div class="mkt-note">수도권 프리미엄 시설 5,000개 × 10대 × ₩360K/년</div>
+          </div>
+          <div class="mkt-val">₩180억</div>
+        </div>
+        <div class="mkt-bar-bg"><div class="mkt-bar" style="width:10%"></div></div>
+      </div>
+      <div class="mkt-row">
+        <div class="mkt-meta">
+          <div>
+            <div class="mkt-name">SOM — 3년 내 목표</div>
+            <div class="mkt-note">250개 시설 × 10대 × ₩360K/년 (SAM의 5%)</div>
+          </div>
+          <div class="mkt-val" style="color:var(--accent)">₩12억</div>
+        </div>
+        <div class="mkt-bar-bg"><div class="mkt-bar" style="width:0.67%"></div></div>
+      </div>
+    </div>
+    <div class="mkt-labels">
+      <div class="mkt-lbl-item"><div class="l">타겟 시설</div><div class="v">공항·병원·백화점</div><div class="d">호텔·오피스·골프장</div></div>
+      <div class="mkt-lbl-item"><div class="l">초기 집중</div><div class="v">수도권</div><div class="d">서울·경기 프리미엄 시설</div></div>
+      <div class="mkt-lbl-item"><div class="l">확장 전략</div><div class="v">체인 본사 계약</div><div class="d">전국 동시 배포 구조</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 06 COMPETITION ── -->
+<section class="slide" data-i="5">
+  <div class="gn">06</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">06 — 10</div>
+  </div>
+  <div class="sl-body">
+    <div class="cat">Competition</div>
+    <h2 class="title">대안 대비<br><em>FoamFit의 위치</em></h2>
+    <div class="comp-wrap">
+      <table class="comp">
+        <thead>
+          <tr>
+            <th>비교 항목</th>
+            <th class="us">FoamFit</th>
+            <th>물티슈</th>
+            <th>비데</th>
+            <th>손세정제 타입</th>
+            <th>아무것도 안 함</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>설치 용이성</td>
+            <td class="us"><span class="ck">✓</span></td>
+            <td><span class="ck">✓</span></td>
+            <td><span class="cx">✗</span></td>
+            <td><span class="ck">✓</span></td>
+            <td><span class="ck">✓</span></td>
+          </tr>
+          <tr>
+            <td>변기 막힘 없음</td>
+            <td class="us"><span class="ck">✓</span></td>
+            <td><span class="cx">✗</span></td>
+            <td><span class="ck">✓</span></td>
+            <td><span class="ck">✓</span></td>
+            <td><span class="ck">✓</span></td>
+          </tr>
+          <tr>
+            <td>세정 효과</td>
+            <td class="us"><span class="ck">✓</span></td>
+            <td><span class="ck">✓</span></td>
+            <td><span class="ck">✓</span></td>
+            <td><span class="cm">△</span></td>
+            <td><span class="cx">✗</span></td>
+          </tr>
+          <tr>
+            <td>관리 편의</td>
+            <td class="us"><span class="ck">✓</span></td>
+            <td><span class="cx">✗</span></td>
+            <td><span class="cx">✗</span></td>
+            <td><span class="cm">△</span></td>
+            <td><span class="ck">✓</span></td>
+          </tr>
+          <tr>
+            <td>B2B 구독 모델</td>
+            <td class="us"><span class="ck">✓</span></td>
+            <td><span class="cx">✗</span></td>
+            <td><span class="cx">✗</span></td>
+            <td><span class="cx">✗</span></td>
+            <td><span class="cx">✗</span></td>
+          </tr>
+          <tr>
+            <td>환경 부담</td>
+            <td class="us"><span class="ck">낮음</span></td>
+            <td><span class="cx">높음</span></td>
+            <td><span class="cm">중간</span></td>
+            <td><span class="ck">낮음</span></td>
+            <td><span class="ck">없음</span></td>
+          </tr>
+          <tr>
+            <td>도입 비용</td>
+            <td class="us"><span class="ck">낮음</span></td>
+            <td><span class="cm">변동</span></td>
+            <td><span class="cx">매우 높음</span></td>
+            <td><span class="ck">낮음</span></td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── 07 PRODUCT ── -->
+<section class="slide" data-i="6">
+  <div class="gn">07</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">07 — 10</div>
+  </div>
+  <div class="sl-body">
+    <div class="cat">Product</div>
+    <h2 class="title">FoamFit<br><em>독립형 폼 디스펜서</em></h2>
+    <div class="rule"></div>
+    <div class="g2" style="margin-top:1vh">
+      <div>
+        <div class="g2" style="gap:1.2vw">
+          <div class="card">
+            <div class="card-lbl">형태</div>
+            <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem)">벽면 독립 설치형</div>
+            <div class="card-sub">기존 디스펜서와 무관</div>
+          </div>
+          <div class="card">
+            <div class="card-lbl">작동</div>
+            <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem)">버튼 푸시</div>
+            <div class="card-sub">즉시 정량 분사</div>
+          </div>
+          <div class="card">
+            <div class="card-lbl">충전</div>
+            <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem)">AA 건전지</div>
+            <div class="card-sub">또는 USB-C 충전</div>
+          </div>
+          <div class="card">
+            <div class="card-lbl">리필</div>
+            <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem)">카트리지식</div>
+            <div class="card-sub">월 구독 자동 배송</div>
+          </div>
+          <div class="card">
+            <div class="card-lbl">디자인</div>
+            <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem)">무광 화이트</div>
+            <div class="card-sub">실버 옵션 제공</div>
+          </div>
+          <div class="card">
+            <div class="card-lbl">설치</div>
+            <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem)">나사 4개</div>
+            <div class="card-sub">공사 없음 · 30분</div>
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1.4vh">
+        <div class="card" style="border-left:3px solid var(--accent)">
+          <div class="card-lbl">핵심 기술</div>
+          <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem);margin-bottom:.5vh">폼 포뮬러 + 정량 펌프</div>
+          <div class="card-sub">화장지에 스며들지 않는 거품 세정제. 물(미스트) 대비 종이 찢어짐 없음. OEM 시작 → 자체 포뮬러 개발 로드맵.</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent)">
+          <div class="card-lbl">차별점</div>
+          <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem);margin-bottom:.5vh">공용화장실 칸 내부 전용</div>
+          <div class="card-sub">핸드워시형 세정제와 달리 화장실 칸 내부에 설치. 사용 목적과 위치를 명확히 차별화한 유일한 제품군.</div>
+        </div>
+        <div class="card" style="border-left:3px solid var(--accent)">
+          <div class="card-lbl">로드맵</div>
+          <div class="card-val" style="font-size:clamp(.9rem,1.3vw,1.1rem);margin-bottom:.5vh">Phase 3: IoT 디스펜서</div>
+          <div class="card-sub">사용량 원격 모니터링 · 자동 발주 · 대시보드 제공. 관리 효율 극대화로 대형 체인 계약 확대.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 08 BUSINESS MODEL ── -->
+<section class="slide" data-i="7">
+  <div class="gn">08</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">08 — 10</div>
+  </div>
+  <div class="sl-body">
+    <div class="cat">Business Model</div>
+    <h2 class="title">하드웨어 판매 +<br><em>구독 수익 구조</em></h2>
+    <div class="biz-wrap">
+      <div>
+        <div class="biz-lbl">1. 디스펜서 하드웨어</div>
+        <div class="biz-price">₩100,000</div>
+        <div class="biz-unit">대당 · 일시불 · 마진 낮게 설정</div>
+        <ul class="biz-list">
+          <li>FoamFit 독립형 디스펜서 1대</li>
+          <li>초기 카트리지 1개 포함</li>
+          <li>벽면 설치 부품 일체</li>
+          <li>도입 장벽 최소화 가격 전략</li>
+        </ul>
+      </div>
+      <div class="biz-sep"></div>
+      <div>
+        <div class="biz-tag">핵심 수익원</div>
+        <div class="biz-lbl">2. 월 구독 (리필 + 유지관리)</div>
+        <div class="biz-price">₩30,000</div>
+        <div class="biz-unit">대당 / 월 · 반복 수익</div>
+        <ul class="biz-list">
+          <li>폼 세정제 카트리지 정기 배송</li>
+          <li>사용량 기반 교체 주기 최적화</li>
+          <li>고장 시 무상 교체 서비스</li>
+          <li>대시보드 사용 현황 리포트</li>
+          <li>연간 구독 시 2개월 무료</li>
+        </ul>
+        <div style="margin-top:2vh;padding:1.5vh 1.5vw;background:var(--accent-d);border:1px solid var(--accent)">
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:.5vh">LTV 계산 (1대 기준)</div>
+          <div style="font-size:clamp(.85rem,1.3vw,1.1rem);font-weight:700">₩100K + ₩30K × 36개월 = <span style="color:var(--accent)">₩1,180,000</span></div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:.3vh">3년 계약 기준 · CAC 대비 LTV 목표 3배 이상</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 09 TEAM ── -->
+<section class="slide" data-i="8">
+  <div class="gn">09</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">09 — 10</div>
+  </div>
+  <div class="sl-body">
+    <div class="cat">Team</div>
+    <h2 class="title">창업팀</h2>
+    <div class="rule"></div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-init">CEO</div>
+        <div class="team-name">대표</div>
+        <div class="team-role">Co-Founder & CEO</div>
+        <div class="team-bio">사업 전략·B2B 영업 총괄. 프리미엄 시설 시장 네트워크 보유. 아이디어 기획 및 시장 검증 주도.</div>
+      </div>
+      <div class="team-card">
+        <div class="team-init">CTO</div>
+        <div class="team-name">기술 책임</div>
+        <div class="team-role">Co-Founder & CTO</div>
+        <div class="team-bio">하드웨어 설계·제조 담당. 소비재 OEM 공급망 경험. 프로토타입 제작 및 제조사 파트너십 담당.</div>
+      </div>
+      <div class="team-card">
+        <div class="team-init">CMO</div>
+        <div class="team-name">마케팅 책임</div>
+        <div class="team-role">B2B 영업 · 마케팅</div>
+        <div class="team-bio">B2B SaaS 영업 경험. 대형 시설 체인 의사결정자 네트워크. PoC 고객사 발굴 및 온보딩 담당.</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1.5vh;border-left:3px solid var(--accent)">
+      <div class="card-lbl">채용 계획 (Series A 이후)</div>
+      <div class="card-sub" style="font-size:.82rem;color:var(--text)">제품 매니저 · 물류·공급망 담당자 · 폼 화학 포뮬러 R&D 전문가 · 고객 성공(CS) 팀장</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 10 FINANCIALS ── -->
+<section class="slide" data-i="9">
+  <div class="gn">10</div>
+  <div class="sl-head">
+    <div class="logo">Foam<b>Fit</b></div>
+    <div class="counter">10 — 10</div>
+  </div>
+  <div class="sl-body">
+    <div class="cat">Financials</div>
+    <h2 class="title">3개년<br><em>재무 전망</em></h2>
+    <div class="fin-grid">
+      <div class="fin-col">
+        <div class="fin-year">YEAR 1</div>
+        <div class="fin-rev">₩1.4억</div>
+        <div class="fin-sub">신규 설치 500대 · PoC 검증</div>
+        <div class="fin-row">
+          <div class="fin-row-l">누적 설치 대수</div>
+          <div class="fin-row-r">500대</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">하드웨어 매출</div>
+          <div class="fin-row-r">₩5,000만</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">구독 매출</div>
+          <div class="fin-row-r">₩9,000만</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">총 매출</div>
+          <div class="fin-row-r">₩1.4억</div>
+        </div>
+      </div>
+      <div class="fin-col">
+        <div class="fin-year">YEAR 2</div>
+        <div class="fin-rev">₩6.4억</div>
+        <div class="fin-sub">신규 1,000대 · 체인 계약 본격화</div>
+        <div class="fin-row">
+          <div class="fin-row-l">누적 설치 대수</div>
+          <div class="fin-row-r">1,500대</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">하드웨어 매출</div>
+          <div class="fin-row-r">₩1억</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">구독 매출</div>
+          <div class="fin-row-r">₩5.4억</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">총 매출</div>
+          <div class="fin-row-r">₩6.4억</div>
+        </div>
+      </div>
+      <div class="fin-col highlight">
+        <div class="fin-year">YEAR 3</div>
+        <div class="fin-rev" style="color:var(--accent)">₩10억</div>
+        <div class="fin-sub">누적 2,500대 · SAM 5% 달성</div>
+        <div class="fin-row">
+          <div class="fin-row-l">누적 설치 대수</div>
+          <div class="fin-row-r ac">2,500대</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">하드웨어 매출</div>
+          <div class="fin-row-r">₩1억</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">구독 매출</div>
+          <div class="fin-row-r ac">₩9억</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-row-l">총 매출</div>
+          <div class="fin-row-r ac">₩10억</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:1.5vh;font-size:.75rem;color:var(--muted)">
+      * 시드 라운드 목표: ₩5억 (프로토타입 제작 · PoC 500대 · 초기 영업팀 구성) &nbsp;|&nbsp; 구독 매출 비중 Year 3: 90%
+    </div>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- NAV DOTS -->
+<div class="nav-dots" id="navDots"></div>
+
+<!-- NAV ARROWS -->
+<div class="nav-arr">
+  <button class="nbtn" id="prev">←</button>
+  <button class="nbtn" id="next">→</button>
+</div>
+
+<script>
+const TOTAL = 10;
+let cur = 0;
+
+const deck  = document.getElementById('deck');
+const slides = Array.from(deck.querySelectorAll('.slide'));
+const dotsEl = document.getElementById('navDots');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const themeBtn = document.getElementById('themeBtn');
+
+// Build dots
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+});
+
+function goTo(n) {
+  if (n < 0 || n >= TOTAL) return;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('exit');
+  setTimeout(() => slides[cur].classList.remove('exit'), 450);
+  cur = n;
+  slides[cur].classList.add('active');
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
+}
+
+prevBtn.addEventListener('click', () => goTo(cur - 1));
+nextBtn.addEventListener('click', () => goTo(cur + 1));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(cur + 1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goTo(cur - 1);
+});
+
+// Touch swipe
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) dx < 0 ? goTo(cur + 1) : goTo(cur - 1);
+}, { passive: true });
+
+// Theme toggle
+const themes = ['dark', 'light'];
+let ti = 0;
+themeBtn.addEventListener('click', () => {
+  ti = (ti + 1) % 2;
+  document.documentElement.setAttribute('data-theme', themes[ti]);
+  themeBtn.textContent = ti === 0 ? '◐' : '◑';
+});
+</script>
+</body>
+</html>
