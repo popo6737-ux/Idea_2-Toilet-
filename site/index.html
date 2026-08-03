@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FoamFit — 물티슈 없는 스마트 화장실</title>
+  <title>FoamFit — 프리미엄 공용화장실 폼 디스펜서</title>
   <style>
     :root {
       --blue:    #1a6fc4;
@@ -13,12 +13,13 @@
       --white:   #ffffff;
       --gray:    #6b7280;
       --dark:    #111827;
-      --card-bg: #ffffff;
       --border:  #e5e7eb;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--dark); line-height: 1.7; }
+
+    /* NAV */
     nav {
       position: sticky; top: 0; z-index: 100;
       background: rgba(255,255,255,0.92);
@@ -28,81 +29,278 @@
       display: flex; align-items: center; justify-content: space-between;
       height: 64px;
     }
-    .logo { font-size: 1.4rem; font-weight: 800; color: var(--blue); }
+    .logo { font-size: 1.4rem; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; }
     .logo span { color: var(--teal); }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { text-decoration: none; color: var(--gray); font-size: 0.95rem; transition: color .2s; }
     .nav-links a:hover { color: var(--blue); }
-    .nav-cta { background: var(--blue); color: #fff; border: none; padding: .5rem 1.2rem; border-radius: 8px; font-size: .9rem; font-weight: 600; cursor: pointer; }
+    .nav-cta {
+      background: var(--blue); color: #fff; border: none;
+      padding: .5rem 1.2rem; border-radius: 8px;
+      font-size: .9rem; font-weight: 600; cursor: pointer;
+      transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--blue-dk); }
+
+    /* HERO */
     .hero {
       min-height: 92vh;
-      background: linear-gradient(135deg, #0f4a8a 0%, #1a6fc4 50%, #00b4a6 100%);
-      display: flex; align-items: center; justify-content: center;
-      text-align: center; padding: 4rem 5%;
+      background: linear-gradient(135deg, #0f4a8a 0%, #1a6fc4 55%, #00b4a6 100%);
+      display: flex; align-items: center;
+      padding: 4rem 5%;
+      position: relative; overflow: hidden;
+      gap: 4rem;
     }
-    .hero-inner { max-width: 780px; }
-    .hero-badge { display: inline-block; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); color: #fff; font-size: .85rem; font-weight: 600; padding: .35rem 1rem; border-radius: 20px; margin-bottom: 1.5rem; }
-    .hero h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 900; color: #fff; line-height: 1.2; margin-bottom: 1.2rem; }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-text { position: relative; flex: 1; max-width: 600px; }
+    .hero-visual { position: relative; flex: 0 0 360px; }
+    .hero-visual img {
+      width: 100%; height: 480px; object-fit: cover;
+      border-radius: 24px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.45);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; font-size: .85rem; font-weight: 600;
+      padding: .35rem 1rem; border-radius: 20px; margin-bottom: 1.5rem;
+      letter-spacing: .5px;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      font-weight: 900; color: #fff;
+      line-height: 1.2; margin-bottom: 1.2rem;
+      letter-spacing: -1px;
+    }
     .hero h1 em { color: #7ee8e0; font-style: normal; }
-    .hero p { font-size: 1.15rem; color: rgba(255,255,255,0.85); margin-bottom: 2.5rem; }
-    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn-primary { background: #fff; color: var(--blue); padding: .85rem 2rem; border-radius: 10px; font-size: 1rem; font-weight: 700; text-decoration: none; box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
-    .btn-outline { border: 2px solid rgba(255,255,255,0.6); color: #fff; padding: .85rem 2rem; border-radius: 10px; font-size: 1rem; font-weight: 600; text-decoration: none; }
-    .stats { background: var(--white); padding: 3rem 5%; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+    .hero p {
+      font-size: 1.1rem; color: rgba(255,255,255,0.85);
+      margin-bottom: 2.5rem; max-width: 480px;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: #fff; color: var(--blue);
+      padding: .85rem 2rem; border-radius: 10px;
+      font-size: 1rem; font-weight: 700; text-decoration: none;
+      transition: transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,0.6); color: #fff;
+      padding: .85rem 2rem; border-radius: 10px;
+      font-size: 1rem; font-weight: 600; text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+    @media (max-width: 860px) {
+      .hero { flex-direction: column; text-align: center; }
+      .hero-btns { justify-content: center; }
+      .hero-visual { display: none; }
+    }
+
+    /* STATS */
+    .stats {
+      background: var(--white);
+      padding: 3rem 5%;
+      display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+    }
     .stat { text-align: center; }
     .stat-num { font-size: 2.4rem; font-weight: 900; color: var(--blue); }
     .stat-label { font-size: .9rem; color: var(--gray); margin-top: .2rem; }
+
+    /* SECTION */
     section { padding: 5rem 5%; }
-    .section-tag { display: inline-block; background: #e0edff; color: var(--blue); font-size: .8rem; font-weight: 700; padding: .3rem .9rem; border-radius: 20px; margin-bottom: 1rem; text-transform: uppercase; }
-    h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900; margin-bottom: 1rem; }
+    .section-tag {
+      display: inline-block;
+      background: #e0edff; color: var(--blue);
+      font-size: .8rem; font-weight: 700; letter-spacing: .5px;
+      padding: .3rem .9rem; border-radius: 20px; margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    h2 { font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 900; letter-spacing: -0.5px; margin-bottom: 1rem; }
     .sub { font-size: 1.05rem; color: var(--gray); max-width: 560px; }
     .centered { text-align: center; }
     .centered .sub { margin: 0 auto; }
+
+    /* PROBLEM */
     .problem { background: #fff; }
-    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-    .problem-card { background: var(--bg); border-radius: 16px; padding: 2rem; border: 1px solid var(--border); }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .problem-card {
+      background: var(--bg); border-radius: 16px;
+      padding: 2rem; border: 1px solid var(--border);
+    }
     .problem-icon { font-size: 2.2rem; margin-bottom: 1rem; }
     .problem-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: .5rem; }
     .problem-card p { font-size: .95rem; color: var(--gray); }
-    .how { background: var(--bg); }
-    .steps { display: flex; margin-top: 3rem; flex-wrap: wrap; justify-content: center; }
-    .step { flex: 1; min-width: 180px; max-width: 220px; text-align: center; position: relative; padding: 0 1rem; }
-    .step:not(:last-child)::after { content: '→'; position: absolute; right: -12px; top: 24px; font-size: 1.4rem; color: var(--teal); }
-    .step-circle { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--teal)); color: #fff; font-size: 1.4rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+
+    /* PRODUCT */
+    .product { background: var(--bg); }
+    .product-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; margin-top: 3rem; align-items: center;
+    }
+    @media (max-width: 768px) { .product-inner { grid-template-columns: 1fr; } }
+    .product-img-wrap {
+      border-radius: 24px;
+      overflow: hidden; border: 1px solid var(--border);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+      aspect-ratio: 3/4;
+    }
+    .product-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .product-specs { display: flex; flex-direction: column; gap: 1rem; }
+    .spec-row {
+      background: #fff; border-radius: 12px; padding: 1.1rem 1.4rem;
+      border: 1px solid var(--border);
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .spec-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .spec-title { font-size: .85rem; color: var(--gray); }
+    .spec-val { font-size: 1rem; font-weight: 700; color: var(--dark); }
+
+    /* HOW IT WORKS */
+    .how { background: #fff; }
+    .steps {
+      display: flex; gap: 0; margin-top: 3rem;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .step {
+      flex: 1; min-width: 160px; max-width: 200px;
+      text-align: center; position: relative; padding: 0 1rem;
+    }
+    .step:not(:last-child)::after {
+      content: '→';
+      position: absolute; right: -12px; top: 24px;
+      font-size: 1.4rem; color: var(--teal);
+    }
+    .step-circle {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color: #fff; font-size: 1.4rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 4px 16px rgba(26,111,196,0.3);
+    }
     .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: .4rem; }
     .step p { font-size: .88rem; color: var(--gray); }
-    .features { background: #fff; }
-    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-    .feature-card { background: var(--bg); border-radius: 16px; padding: 2rem; border: 1px solid var(--border); transition: transform .2s; }
-    .feature-card:hover { transform: translateY(-4px); }
-    .feature-icon { width: 48px; height: 48px; border-radius: 12px; background: linear-gradient(135deg, var(--blue), var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 1rem; }
+
+    /* FEATURES */
+    .features { background: var(--bg); }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .feature-card {
+      background: #fff; border-radius: 16px;
+      padding: 2rem; border: 1px solid var(--border);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+    .feature-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; margin-bottom: 1rem;
+    }
     .feature-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem; }
     .feature-card p { font-size: .9rem; color: var(--gray); }
+
+    /* PRICING */
+    .pricing { background: #fff; }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem; margin-top: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;
+    }
+    .price-card {
+      border-radius: 20px; padding: 2.5rem;
+      border: 2px solid var(--border);
+      text-align: center; transition: transform .2s;
+    }
+    .price-card:hover { transform: translateY(-4px); }
+    .price-card.featured {
+      border-color: var(--blue);
+      background: linear-gradient(160deg, #eef4ff 0%, #e6faf8 100%);
+    }
+    .price-badge {
+      display: inline-block;
+      background: var(--blue); color: #fff;
+      font-size: .75rem; font-weight: 700; letter-spacing: .5px;
+      padding: .25rem .8rem; border-radius: 20px; margin-bottom: 1rem;
+    }
+    .price-title { font-size: 1.15rem; font-weight: 800; margin-bottom: .5rem; }
+    .price-num { font-size: 2.6rem; font-weight: 900; color: var(--blue); line-height: 1; }
+    .price-unit { font-size: .9rem; color: var(--gray); margin-bottom: 1.5rem; }
+    .price-list { list-style: none; text-align: left; display: flex; flex-direction: column; gap: .6rem; }
+    .price-list li { font-size: .9rem; }
+    .price-list li::before { content: '✓ '; color: var(--teal); font-weight: 700; }
+
+    /* B2B */
     .b2b { background: var(--bg); }
-    .b2b-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem; }
+    .b2b-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 3rem; margin-top: 3rem; align-items: start;
+    }
     @media (max-width: 768px) { .b2b-grid { grid-template-columns: 1fr; } }
     .target-list { list-style: none; }
-    .target-list li { display: flex; align-items: center; gap: .8rem; padding: 1rem 1.2rem; margin-bottom: .8rem; background: #fff; border-radius: 12px; border: 1px solid var(--border); font-weight: 600; }
+    .target-list li {
+      display: flex; align-items: center; gap: .8rem;
+      padding: 1rem 1.2rem; margin-bottom: .8rem;
+      background: #fff; border-radius: 12px; border: 1px solid var(--border);
+      font-weight: 600;
+    }
+    .target-list li span.icon { font-size: 1.4rem; }
     .objection-list { display: flex; flex-direction: column; gap: 1rem; }
-    .objection { background: #fff; border-radius: 12px; padding: 1.2rem 1.5rem; border-left: 4px solid var(--teal); }
+    .objection {
+      background: #fff; border-radius: 12px; padding: 1.2rem 1.5rem;
+      border-left: 4px solid var(--teal);
+    }
     .objection .q { font-size: .9rem; color: var(--gray); margin-bottom: .4rem; }
     .objection .q::before { content: 'Q  '; font-weight: 700; }
-    .objection .a { font-size: .95rem; font-weight: 600; }
+    .objection .a { font-size: .95rem; font-weight: 600; color: var(--dark); }
     .objection .a::before { content: 'A  '; color: var(--teal); font-weight: 800; }
-    .roadmap { background: #fff; }
-    .phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-    .phase { border-radius: 16px; padding: 2rem; border: 1px solid var(--border); }
-    .phase-1 { background: #eef4ff; border-color: #b3cef5; }
-    .phase-2 { background: #e6faf8; border-color: #80ddd6; }
-    .phase-3 { background: linear-gradient(135deg, #1a6fc4, #00b4a6); color: #fff; border: none; }
-    .phase-label { font-size: .8rem; font-weight: 700; text-transform: uppercase; margin-bottom: .8rem; opacity: .7; }
-    .phase h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: .8rem; }
-    .phase ul { list-style: none; }
-    .phase ul li { font-size: .9rem; margin-bottom: .4rem; opacity: .85; }
-    .phase ul li::before { content: '✓  '; font-weight: 700; }
-    .phase-3 .phase-label, .phase-3 h3, .phase-3 ul li { color: #fff; opacity: 1; }
+
+    /* MARKET */
+    .market { background: #fff; }
+    .market-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    @media (max-width: 640px) { .market-grid { grid-template-columns: 1fr; } }
+    .market-card {
+      border-radius: 20px; padding: 2rem;
+      text-align: center; border: 1px solid var(--border);
+    }
+    .market-card.tam { background: #eef4ff; }
+    .market-card.sam { background: #e6faf8; }
+    .market-card.som { background: linear-gradient(135deg, #1a6fc4, #00b4a6); color: #fff; }
+    .market-label { font-size: .8rem; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; opacity: .7; }
+    .market-num { font-size: 2rem; font-weight: 900; margin: .4rem 0 .2rem; }
+    .market-sub { font-size: .85rem; opacity: .75; }
+    .market-card.som .market-label,
+    .market-card.som .market-num,
+    .market-card.som .market-sub { color: #fff; opacity: 1; }
+    .market-card.som .market-label { opacity: .8; }
+    .market-card.som .market-sub { opacity: .85; }
+
+    /* SURVEY */
     .survey { background: var(--bg); }
-    .survey-chart { max-width: 560px; margin: 3rem auto 0; background: #fff; border-radius: 20px; padding: 2.5rem; border: 1px solid var(--border); }
+    .survey-chart {
+      max-width: 560px; margin: 3rem auto 0;
+      background: #fff; border-radius: 20px; padding: 2.5rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
     .survey-chart h3 { font-size: 1rem; color: var(--gray); margin-bottom: 1.5rem; text-align: center; }
     .bar-item { margin-bottom: 1.2rem; }
     .bar-label { display: flex; justify-content: space-between; font-size: .9rem; margin-bottom: .4rem; }
@@ -113,147 +311,455 @@
     .bar-fill.c2 { background: #f0c040; width: 33.3%; }
     .bar-fill.c3 { background: #9ca3af; width: 16.7%; }
     .survey-note { text-align: center; font-size: .85rem; color: var(--gray); margin-top: 1.5rem; }
-    .cta-section { background: linear-gradient(135deg, #0f4a8a, #00b4a6); padding: 5rem 5%; text-align: center; }
-    .cta-section h2 { color: #fff; margin-bottom: 1rem; }
-    .cta-section p { color: rgba(255,255,255,0.85); margin-bottom: 2.5rem; }
-    .cta-form { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto; }
-    .cta-form input { flex: 1; min-width: 200px; padding: .85rem 1.2rem; border-radius: 10px; border: none; font-size: 1rem; }
-    .cta-form button { background: #fff; color: var(--blue); padding: .85rem 1.8rem; border-radius: 10px; border: none; font-size: 1rem; font-weight: 700; cursor: pointer; }
-    footer { background: var(--dark); color: rgba(255,255,255,0.5); padding: 2rem 5%; text-align: center; font-size: .88rem; }
+
+    /* ROADMAP */
+    .roadmap { background: #fff; }
+    .phases {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem; margin-top: 3rem;
+    }
+    .phase {
+      border-radius: 16px; padding: 2rem;
+      border: 1px solid var(--border); position: relative; overflow: hidden;
+    }
+    .phase-1 { background: #eef4ff; border-color: #b3cef5; }
+    .phase-2 { background: #e6faf8; border-color: #80ddd6; }
+    .phase-3 { background: linear-gradient(135deg, #1a6fc4, #00b4a6); color: #fff; border: none; }
+    .phase-label { font-size: .8rem; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-bottom: .8rem; opacity: .7; }
+    .phase h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: .8rem; }
+    .phase ul { list-style: none; }
+    .phase ul li { font-size: .9rem; margin-bottom: .4rem; opacity: .85; }
+    .phase ul li::before { content: '✓  '; font-weight: 700; }
+    .phase-3 .phase-label, .phase-3 h3, .phase-3 ul li { color: #fff; opacity: 1; }
+    .phase-3 .phase-label { opacity: .8; }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, #0f4a8a, #00b4a6);
+      padding: 5rem 5%; text-align: center;
+    }
+    .cta-section h2 { color: #fff; font-size: clamp(1.8rem, 3vw, 2.6rem); margin-bottom: 1rem; }
+    .cta-section p { color: rgba(255,255,255,0.85); font-size: 1.05rem; margin-bottom: 2.5rem; }
+    .cta-form {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      max-width: 520px; margin: 0 auto;
+    }
+    .cta-form input {
+      flex: 1; min-width: 200px;
+      padding: .85rem 1.2rem; border-radius: 10px;
+      border: none; font-size: 1rem; outline: none;
+    }
+    .cta-form button {
+      background: #fff; color: var(--blue);
+      padding: .85rem 1.8rem; border-radius: 10px;
+      border: none; font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: transform .2s;
+    }
+    .cta-form button:hover { transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark); color: rgba(255,255,255,0.5);
+      padding: 2rem 5%; text-align: center; font-size: .88rem;
+    }
     footer strong { color: rgba(255,255,255,0.8); }
-    @media (max-width: 600px) { .stats { gap: 2rem; } nav .nav-links { display: none; } }
+
+    @media (max-width: 600px) {
+      .stats { gap: 2rem; }
+      .step:not(:last-child)::after { display: none; }
+      nav .nav-links { display: none; }
+    }
   </style>
 </head>
 <body>
+
+<!-- NAV -->
 <nav>
   <div class="logo">Foam<span>Fit</span></div>
   <ul class="nav-links">
-    <li><a href="#how">작동 원리</a></li>
-    <li><a href="#features">특징</a></li>
+    <li><a href="#product">제품</a></li>
+    <li><a href="#how">사용법</a></li>
+    <li><a href="#pricing">가격</a></li>
     <li><a href="#b2b">B2B</a></li>
-    <li><a href="#roadmap">로드맵</a></li>
   </ul>
   <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">도입 문의</button>
 </nav>
+
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-inner">
-    <div class="hero-badge">🚀 물티슈 없는 새로운 공중화장실 경험</div>
-    <h1>화장지를 뽑으면<br><em>폼이 분사됩니다</em></h1>
-    <p>배터리도, 전기공사도 필요 없습니다.<br>기존 디스펜서에 그냥 붙이면 됩니다.</p>
+  <div class="hero-text">
+    <div class="hero-badge">프리미엄 공용화장실 위생 솔루션</div>
+    <h1>독립형 폼 디스펜서로<br><em>화장실 품격을</em><br>높이세요</h1>
+    <p>기존 휴지 디스펜서 옆에 설치하는 별도 폼 디스펜서.<br>버튼 하나로 프리미엄 위생 경험을 제공합니다.</p>
     <div class="hero-btns">
       <a href="#b2b" class="btn-primary">B2B 도입 알아보기</a>
-      <a href="#how" class="btn-outline">작동 방식 보기</a>
+      <a href="#how" class="btn-outline">사용법 보기</a>
     </div>
   </div>
+  <div class="hero-visual">
+    <img src="FoamFit 이미지.png" alt="FoamFit 폼 디스펜서 실제 사용 모습" />
+  </div>
 </section>
+
+<!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="stat-num">50%</div><div class="stat-label">직장인 중 물티슈 대안 원함<br><small>(블라인드 설문 n=18)</small></div></div>
-  <div class="stat"><div class="stat-num">0W</div><div class="stat-label">소비 전력<br><small>(순수 기계식 구동)</small></div></div>
-  <div class="stat"><div class="stat-num">5분</div><div class="stat-label">설치 시간<br><small>(기존 디스펜서 탈착 없음)</small></div></div>
-  <div class="stat"><div class="stat-num">B2B</div><div class="stat-label">타겟 시장<br><small>(공공기관·휴게소·오피스)</small></div></div>
+  <div class="stat">
+    <div class="stat-num">50%</div>
+    <div class="stat-label">직장인 중 물티슈 대안 원함<br><small>(블라인드 설문 n=18)</small></div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">₩100K</div>
+    <div class="stat-label">디스펜서 초기 도입가<br><small>(1대 기준)</small></div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">₩30K</div>
+    <div class="stat-label">월 구독료 (리필+관리)<br><small>(1대 기준)</small></div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">B2B</div>
+    <div class="stat-label">프리미엄 타겟 시장<br><small>(공항·병원·호텔·백화점)</small></div>
+  </div>
 </div>
+
+<!-- PROBLEM -->
 <section class="problem" id="problem">
   <div class="section-tag">문제</div>
-  <h2>공중화장실의 불편한 진실</h2>
-  <p class="sub">물티슈를 쓰고 싶지만, 그럴 수 없는 이유가 있습니다.</p>
+  <h2>공용화장실의 불편한 현실</h2>
+  <p class="sub">프리미엄 시설도 화장실 위생만큼은 해결책이 없었습니다.</p>
   <div class="problem-grid">
-    <div class="problem-card"><div class="problem-icon">🚽</div><h3>변기 막힘 유발</h3><p>물티슈는 물에 녹지 않아 배관을 막습니다. 처리 비용이 수십만 원에 달하기도 합니다.</p></div>
-    <div class="problem-card"><div class="problem-icon">🗑️</div><h3>쓰레기통 넘침</h3><p>물티슈 쓰레기가 화장실 쓰레기통을 가득 채워 관리 부담이 커집니다.</p></div>
-    <div class="problem-card"><div class="problem-icon">💸</div><h3>비데 설치 불가</h3><p>비데는 공간·비용·배관 문제로 공중화장실에 보급하기 어렵습니다.</p></div>
-    <div class="problem-card"><div class="problem-icon">😣</div><h3>마찰(Friction) 지점</h3><p>"깨끗하게 닦고 싶지만 물티슈는 쓰기 꺼려진다" — 직장인 50%가 공감하는 불편함입니다.</p></div>
-  </div>
-</section>
-<section class="how" id="how">
-  <div class="centered">
-    <div class="section-tag">작동 원리</div>
-    <h2>전기 없이 작동합니다</h2>
-    <p class="sub">화장지를 뽑는 힘만으로 폼이 분사됩니다.</p>
-  </div>
-  <div class="steps">
-    <div class="step"><div class="step-circle">🤚</div><h3>손을 뻗는다</h3><p>디스펜서 레버에 손을 가져댑니다</p></div>
-    <div class="step"><div class="step-circle">📜</div><h3>화장지를 당긴다</h3><p>레버를 당기면 기계식 펌프가 압축됩니다</p></div>
-    <div class="step"><div class="step-circle">💨</div><h3>폼이 분사된다</h3><p>노즐에서 적정량의 폼 세정제가 분사됩니다</p></div>
-    <div class="step"><div class="step-circle">✨</div><h3>물티슈처럼 닦는다</h3><p>거품이 묻은 화장지로 쾌적하게 닦습니다</p></div>
-  </div>
-  <div style="text-align:center;margin-top:2rem;padding:1rem 2rem;background:#fff;border-radius:12px;border:1px solid var(--border);display:flex;justify-content:center;">
-    <p style="color:var(--gray)">🔒 &nbsp;<strong>Lock 스위치</strong> 내장 — 원하지 않으면 사용자가 직접 끌 수 있습니다</p>
-  </div>
-</section>
-<section class="features" id="features">
-  <div class="centered">
-    <div class="section-tag">특징</div>
-    <h2>왜 FoamFit인가</h2>
-    <p class="sub">기존 제품과 다른 4가지 핵심 차별점입니다.</p>
-  </div>
-  <div class="features-grid">
-    <div class="feature-card"><div class="feature-icon">⚙️</div><h3>완전 기계식 — 무전원</h3><p>배터리 교체도, 전기 공사도 없습니다. 화장지를 뽑는 힘만으로 작동하는 순수 기계식 구조입니다.</p></div>
-    <div class="feature-card"><div class="feature-icon">🔧</div><h3>모듈형 — 5분 설치</h3><p>기존 점보롤 디스펜서를 교체할 필요 없습니다. 옆에 붙이면 끝. PoC 도입 장벽이 거의 없습니다.</p></div>
-    <div class="feature-card"><div class="feature-icon">🧴</div><h3>폼 세정제 — 찢어지지 않음</h3><p>물(미스트)과 달리 거품은 화장지에 덜 스며들어 찢어지지 않습니다. 세정력도 더 뛰어납니다.</p></div>
-    <div class="feature-card"><div class="feature-icon">📦</div><h3>카트리지 구독 — 관리 최소화</h3><p>정기 배송 카트리지 하나로 폼 보충이 끝납니다.</p></div>
-  </div>
-</section>
-<section class="survey" id="survey">
-  <div class="centered">
-    <div class="section-tag">시장 검증</div>
-    <h2>직장인들은 이미 원하고 있습니다</h2>
-    <p class="sub">블라인드 앱 설문에서 확인한 실제 수요입니다.</p>
-  </div>
-  <div class="survey-chart">
-    <h3>💬 "대변 후 휴지 사용 경험" 설문 결과</h3>
-    <div class="bar-item"><div class="bar-label"><span>물티슈가 있다면 쓴다 (잠재 고객)</span><span class="pct">50%</span></div><div class="bar-bg"><div class="bar-fill c1"></div></div></div>
-    <div class="bar-item"><div class="bar-label"><span>마른 휴지로 충분하다</span><span class="pct">33%</span></div><div class="bar-bg"><div class="bar-fill c2"></div></div></div>
-    <div class="bar-item"><div class="bar-label"><span>물티슈도 귀찮다</span><span class="pct">17%</span></div><div class="bar-bg"><div class="bar-fill c3"></div></div></div>
-    <p class="survey-note">n=18 | 블라인드 앱 직장인 설문 | 2026</p>
-  </div>
-</section>
-<section class="b2b" id="b2b">
-  <div class="section-tag">B2B</div>
-  <h2>어디에 도입할 수 있나요</h2>
-  <p class="sub">점보롤 디스펜서가 있는 곳이라면 어디든 가능합니다.</p>
-  <div class="b2b-grid">
-    <div>
-      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--gray)">주요 도입 대상</h3>
-      <ul class="target-list">
-        <li><span>🛣️</span> 고속도로 휴게소</li>
-        <li><span>🏛️</span> 공공기관 (정부·지자체 청사)</li>
-        <li><span>🏬</span> 대형 쇼핑몰·복합시설</li>
-        <li><span>🏢</span> 기업 오피스 빌딩</li>
-      </ul>
+    <div class="problem-card">
+      <div class="problem-icon">🚽</div>
+      <h3>물티슈 → 변기 막힘</h3>
+      <p>물티슈는 물에 녹지 않아 배관을 막습니다. 처리 비용이 수십만 원에 달하기도 합니다.</p>
     </div>
-    <div>
-      <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--gray)">자주 받는 질문</h3>
-      <div class="objection-list">
-        <div class="objection"><p class="q">휴지 사용량이 늘면 비용이 올라가지 않나요?</p><p class="a">물티슈 변기 막힘 해결 비용이 훨씬 더 큽니다.</p></div>
-        <div class="objection"><p class="q">전기 공사가 필요한가요?</p><p class="a">완전 기계식입니다. 전기 공사 불필요합니다.</p></div>
-        <div class="objection"><p class="q">기존 디스펜서를 교체해야 하나요?</p><p class="a">아닙니다. 기존 디스펜서 옆에 부착만 하면 됩니다.</p></div>
-        <div class="objection"><p class="q">관리가 복잡하지 않나요?</p><p class="a">카트리지 정기 구독으로 교체 하나로 끝납니다.</p></div>
+    <div class="problem-card">
+      <div class="problem-icon">💸</div>
+      <h3>비데 보급 한계</h3>
+      <p>비데는 공간·비용·배관 공사 문제로 공중화장실 전 칸에 설치하기 어렵습니다.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">🏨</div>
+      <h3>시설 이미지 저하</h3>
+      <p>화장실 품질이 시설 전반의 브랜드 이미지에 영향을 줍니다. 청결도 불만이 리뷰에 등장합니다.</p>
+    </div>
+    <div class="problem-card">
+      <div class="problem-icon">😣</div>
+      <h3>위생 대안 부재</h3>
+      <p>"깨끗하게 닦고 싶지만 방법이 없다" — 이용객 50%가 공감하는 불편함입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT -->
+<section class="product" id="product">
+  <div class="section-tag">제품</div>
+  <h2>FoamFit 별도 디스펜서</h2>
+  <p class="sub">기존 휴지 디스펜서 옆 벽면에 설치하는 독립형 폼 세정제 디스펜서입니다.</p>
+  <div class="product-inner">
+    <div class="product-img-wrap">
+      <img src="FoamFit 이미지.png" alt="FoamFit 폼 디스펜서 — 화장실 벽면에 설치된 모습" />
+    </div>
+    <div class="product-specs">
+      <div class="spec-row">
+        <div class="spec-icon">📦</div>
+        <div>
+          <div class="spec-title">제품 형태</div>
+          <div class="spec-val">벽면 독립 설치형 폼 디스펜서</div>
+        </div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-icon">🔩</div>
+        <div>
+          <div class="spec-title">설치 방식</div>
+          <div class="spec-val">벽면 나사 고정 (기존 디스펜서 무관)</div>
+        </div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-icon">🤚</div>
+        <div>
+          <div class="spec-title">작동 방식</div>
+          <div class="spec-val">버튼 푸시 → 폼 세정제 즉시 분사</div>
+        </div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-icon">🧴</div>
+        <div>
+          <div class="spec-title">리필 방식</div>
+          <div class="spec-val">교체형 카트리지 (월 정기 구독 배송)</div>
+        </div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-icon">⚡</div>
+        <div>
+          <div class="spec-title">전원</div>
+          <div class="spec-val">건전지 또는 USB-C 충전식 선택</div>
+        </div>
+      </div>
+      <div class="spec-row">
+        <div class="spec-icon">🎨</div>
+        <div>
+          <div class="spec-title">디자인</div>
+          <div class="spec-val">프리미엄 무광 화이트 / 실버 2가지</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="centered">
+    <div class="section-tag">사용법</div>
+    <h2>3단계로 끝납니다</h2>
+    <p class="sub">누구나 직관적으로 사용할 수 있습니다. 별도 교육 불필요.</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-circle">🤚</div>
+      <h3>디스펜서 버튼 누름</h3>
+      <p>화장실 칸 벽면의 FoamFit 버튼을 한 번 누릅니다</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">💨</div>
+      <h3>폼 세정제 분사</h3>
+      <p>한 번에 적정량의 폼 세정제가 바로 나옵니다</p>
+    </div>
+    <div class="step">
+      <div class="step-circle">🧻</div>
+      <h3>휴지에 묻혀 사용</h3>
+      <p>폼이 묻은 휴지로 물티슈처럼 쾌적하게 닦습니다</p>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:2.5rem;">
+    <div style="display:inline-block; padding:1.2rem 2.5rem; background:#fff; border-radius:14px; border:1px solid var(--border);">
+      <p style="color:var(--gray); font-size:.95rem;">기존 화장지 디스펜서를 <strong>교체하거나 변형할 필요 없습니다</strong> — 옆 벽면에 추가 설치만 하면 됩니다</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="centered">
+    <div class="section-tag">차별점</div>
+    <h2>왜 FoamFit인가</h2>
+    <p class="sub">독립형 디스펜서가 가진 4가지 핵심 강점입니다.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🏗️</div>
+      <h3>완전 독립 — 기존 설비 무관</h3>
+      <p>점보롤, 낱장 휴지, 어떤 형태의 화장지 디스펜서와도 관계없이 독립 설치됩니다. 기존 설비를 건드리지 않습니다.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✨</div>
+      <h3>프리미엄 디자인</h3>
+      <p>공항·호텔·백화점 인테리어에 어울리는 세련된 무광 디자인. 시설 브랜드 이미지를 높여줍니다.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧴</div>
+      <h3>폼 세정제 — 찢어짐 없음</h3>
+      <p>미스트(물)와 달리 거품은 화장지에 덜 스며들어 찢어지지 않습니다. 세정력도 더 뛰어납니다.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📦</div>
+      <h3>구독 리필 — 관리 최소화</h3>
+      <p>월 정기 배송 카트리지 교체 하나로 끝납니다. 시설 관리팀의 추가 업무 부담이 없습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="centered">
+    <div class="section-tag">가격</div>
+    <h2>단순하고 예측 가능한 비용</h2>
+    <p class="sub">디스펜서 구매 후 월 구독으로 리필과 유지관리를 한 번에.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-title">디스펜서 하드웨어</div>
+      <div class="price-num">₩100,000</div>
+      <div class="price-unit">대당 · 일시불</div>
+      <ul class="price-list">
+        <li>FoamFit 독립형 디스펜서 1대</li>
+        <li>초기 카트리지 1개 포함</li>
+        <li>벽면 설치 부품 일체</li>
+        <li>설치 가이드 제공</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge">핵심 수익</div>
+      <div class="price-title">월 구독 (리필 + 관리)</div>
+      <div class="price-num">₩30,000</div>
+      <div class="price-unit">대당 / 월</div>
+      <ul class="price-list">
+        <li>폼 세정제 카트리지 정기 배송</li>
+        <li>사용량 기반 교체 주기 최적화</li>
+        <li>고장 시 무상 교체 서비스</li>
+        <li>대시보드 사용 현황 리포트</li>
+      </ul>
+    </div>
+  </div>
+  <p style="text-align:center; margin-top:2rem; font-size:.9rem; color:var(--gray);">10대 이상 도입 시 하드웨어 할인 협의 가능 · 연간 구독 시 2개월 무료</p>
+</section>
+
+<!-- B2B -->
+<section class="b2b" id="b2b">
+  <div class="section-tag">B2B</div>
+  <h2>어디에 도입할 수 있나요</h2>
+  <p class="sub">프리미엄 위생 경험이 브랜드 가치와 직결되는 시설을 타겟합니다.</p>
+  <div class="b2b-grid">
+    <div>
+      <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--gray);">주요 도입 대상</h3>
+      <ul class="target-list">
+        <li><span class="icon">✈️</span> 공항 (국제선·국내선 터미널)</li>
+        <li><span class="icon">🏥</span> 병원·의료기관</li>
+        <li><span class="icon">🏬</span> 백화점·프리미엄 쇼핑몰</li>
+        <li><span class="icon">🏨</span> 호텔·리조트</li>
+        <li><span class="icon">🏢</span> 기업 오피스 빌딩</li>
+        <li><span class="icon">⛳</span> 골프장·프리미엄 스포츠시설</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--gray);">자주 받는 질문</h3>
+      <div class="objection-list">
+        <div class="objection">
+          <p class="q">기존 디스펜서를 교체해야 하나요?</p>
+          <p class="a">아닙니다. 독립 설치형이라 기존 설비는 그대로 유지됩니다.</p>
+        </div>
+        <div class="objection">
+          <p class="q">설치 공사가 복잡한가요?</p>
+          <p class="a">벽면 나사 2~4개로 고정합니다. 별도 공사 필요 없습니다.</p>
+        </div>
+        <div class="objection">
+          <p class="q">관리 인력이 따로 필요한가요?</p>
+          <p class="a">월 구독 카트리지 교체만 하면 됩니다. 기존 청소 인력으로 충분합니다.</p>
+        </div>
+        <div class="objection">
+          <p class="q">이용객이 사용법을 모를 수 있지 않나요?</p>
+          <p class="a">PUSH 버튼 하나로 직관적입니다. 스티커 안내물도 함께 제공합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET SIZE -->
+<section class="market" id="market">
+  <div class="centered">
+    <div class="section-tag">시장 규모</div>
+    <h2>한국 B2B 공용화장실 위생 시장</h2>
+    <p class="sub">수도권 프리미엄 시설 선점 후 전국 체인 본사 계약으로 확장합니다.</p>
+  </div>
+  <div class="market-grid">
+    <div class="market-card tam">
+      <div class="market-label">TAM</div>
+      <div class="market-num">₩1,800억</div>
+      <div class="market-sub">500,000대 × ₩360K/년<br>전국 공용화장실 전체</div>
+    </div>
+    <div class="market-card sam">
+      <div class="market-label">SAM</div>
+      <div class="market-num">₩180억</div>
+      <div class="market-sub">수도권 프리미엄 5,000개 시설<br>도달 가능한 세그먼트</div>
+    </div>
+    <div class="market-card som">
+      <div class="market-label">SOM (3년 목표)</div>
+      <div class="market-num">₩12억</div>
+      <div class="market-sub">250개 시설 · 2,500대<br>SAM의 5% 점유</div>
+    </div>
+  </div>
+</section>
+
+<!-- SURVEY -->
+<section class="survey" id="survey">
+  <div class="centered">
+    <div class="section-tag">시장 검증</div>
+    <h2>이용객들은 이미 원하고 있습니다</h2>
+    <p class="sub">블라인드 앱 설문에서 확인한 실제 수요입니다.</p>
+  </div>
+  <div class="survey-chart">
+    <h3>💬 "대변 후 휴지 사용 경험" 설문 결과</h3>
+    <div class="bar-item">
+      <div class="bar-label">
+        <span>물티슈 대안이 있다면 쓴다 (잠재 고객)</span>
+        <span class="pct">50%</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill c1"></div></div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label">
+        <span>마른 휴지로 충분하다</span>
+        <span class="pct">33%</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill c2"></div></div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label">
+        <span>물티슈도 귀찮다</span>
+        <span class="pct">17%</span>
+      </div>
+      <div class="bar-bg"><div class="bar-fill c3"></div></div>
+    </div>
+    <p class="survey-note">n=18 | 블라인드 앱 직장인 설문 | 2026</p>
+  </div>
+</section>
+
+<!-- ROADMAP -->
 <section class="roadmap" id="roadmap">
   <div class="centered">
     <div class="section-tag">로드맵</div>
     <h2>단계별 성장 전략</h2>
-    <p class="sub">디스펜서 파트너십으로 시작해 자체 브랜드로 확장합니다.</p>
+    <p class="sub">수도권 프리미엄 시설 선점 후 전국 체인 계약으로 확장합니다.</p>
   </div>
   <div class="phases">
-    <div class="phase phase-1"><div class="phase-label">Phase 1 · 0~12개월</div><h3>파트너십 공동개발</h3><ul><li>디스펜서 제조사 파트너십</li><li>OEM 폼 세정제 공급 계약</li><li>PoC 시범 설치 (휴게소 등)</li><li>기계식 펌프 프로토타입</li></ul></div>
-    <div class="phase phase-2"><div class="phase-label">Phase 2 · 12~24개월</div><h3>카트리지 구독 정착</h3><ul><li>B2B 정기 구독 런칭</li><li>사용량 데이터 수집·분석</li><li>교체 주기 최적화</li><li>고객사 레퍼런스 확보</li></ul></div>
-    <div class="phase phase-3"><div class="phase-label">Phase 3 · 24개월+</div><h3>자체 브랜드 확장</h3><ul><li>자체 폼 포뮬러 개발</li><li>특허 출원</li><li>FoamFit 독립 브랜드 론칭</li><li>직접 B2B 영업 확장</li></ul></div>
+    <div class="phase phase-1">
+      <div class="phase-label">Phase 1 · 0~12개월</div>
+      <h3>프로토타입 & PoC</h3>
+      <ul>
+        <li>독립형 디스펜서 프로토타입 제작</li>
+        <li>OEM 폼 세정제 공급 계약</li>
+        <li>수도권 프리미엄 시설 시범 설치</li>
+        <li>이용객 피드백 수집 및 개선</li>
+      </ul>
+    </div>
+    <div class="phase phase-2">
+      <div class="phase-label">Phase 2 · 12~24개월</div>
+      <h3>구독 모델 정착</h3>
+      <ul>
+        <li>B2B 월 구독 공식 런칭</li>
+        <li>대형 체인 본사 계약 (공항·호텔)</li>
+        <li>사용량 데이터 기반 최적화</li>
+        <li>고객사 레퍼런스 확보</li>
+      </ul>
+    </div>
+    <div class="phase phase-3">
+      <div class="phase-label">Phase 3 · 24개월+</div>
+      <h3>브랜드 & 해외 확장</h3>
+      <ul>
+        <li>자체 폼 포뮬러 개발 및 특허</li>
+        <li>FoamFit 브랜드 독자 성장</li>
+        <li>동남아·일본 시장 진출</li>
+        <li>스마트 IoT 디스펜서 출시</li>
+      </ul>
+    </div>
   </div>
 </section>
+
+<!-- CTA -->
 <section class="cta-section" id="contact">
   <h2>도입을 검토하고 계신가요?</h2>
   <p>파트너십·시범 설치·구독 문의를 남겨주세요.<br>담당자가 직접 연락드리겠습니다.</p>
   <div class="cta-form">
     <input type="email" placeholder="이메일 주소를 입력해주세요" />
-    <button onclick="alert('문의가 접수되었습니다!')">문의하기</button>
+    <button onclick="alert('문의가 접수되었습니다. 곧 연락드리겠습니다!')">문의하기</button>
   </div>
 </section>
+
+<!-- FOOTER -->
 <footer>
-  <p><strong>FoamFit</strong> &nbsp;|&nbsp; 물티슈 없는 스마트 화장실 솔루션 &nbsp;|&nbsp; © 2026</p>
-  <p style="margin-top:.5rem;font-size:.8rem">MVP 기획 단계 · Mock 사이트</p>
+  <p><strong>FoamFit</strong> &nbsp;|&nbsp; 프리미엄 공용화장실 폼 디스펜서 솔루션 &nbsp;|&nbsp; © 2026</p>
+  <p style="margin-top:.5rem; font-size:.8rem;">MVP 기획 단계 · Mock 사이트</p>
 </footer>
+
 </body>
 </html>
